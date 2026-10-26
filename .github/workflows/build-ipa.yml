@@ -21,8 +21,7 @@ jobs:
       - name: Install System Dependencies
         run: |
           brew install dpkg ldid
-          python3 -m pip install --upgrade pip
-          python3 -m pip install git+https://github.com/asdfzxcvbn/pyzule-rw.git
+          python3 -m pip install --break-system-packages git+https://github.com/asdfzxcvbn/pyzule-rw.git
 
       - name: Setup Theos & SDKs
         run: |
