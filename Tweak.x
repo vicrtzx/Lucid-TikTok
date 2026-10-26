@@ -1829,18 +1829,6 @@ static NSSet<NSString *> *jailbreakPathsSet;
 }
 %end
 
-%hook GULAppEnvironmentUtil
-+(bool)isFromAppStore {
-	return YES;
-}
-+(bool)isAppStoreReceiptSandbox {
-	return NO;
-}
-+(bool)isAppExtension {
-	return YES;
-}
-%end
-
 %hook FBSDKAppEventsUtility
 +(bool)isDebugBuild {
 	return NO;
@@ -1859,23 +1847,6 @@ static NSSet<NSString *> *jailbreakPathsSet;
 		return nil;
 	}
 	return %orig;
-}
-%end
-%hook AWESecurity
-- (void)resetCollectMode {
-	return;
-}
-%end
-%hook MSManagerOV
-- (id)setMode {
-	return (id (^)(id)) ^{
-	};
-}
-%end
-%hook MSConfigOV
-- (id)setMode {
-	return (id (^)(id)) ^{
-	};
 }
 %end
 
