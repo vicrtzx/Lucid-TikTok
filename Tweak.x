@@ -1763,14 +1763,18 @@ static NSSet<NSString *> *jailbreakPathsSet;
 
 %hook NSFileManager
 -(BOOL)fileExistsAtPath:(id)arg1 {
-    if ([arg1 isKindOfClass:[NSString class]] && [jailbreakPathsSet containsObject:arg1]) {
-        return NO;
+    if ([arg1 isKindOfClass:[NSString class]]) {
+        if ([jailbreakPathsSet containsObject:arg1] || [arg1 hasSuffix:@"embedded.mobileprovision"]) {
+            return NO;
+        }
     }
     return %orig;
 }
 -(BOOL)fileExistsAtPath:(id)arg1 isDirectory:(BOOL*)arg2 {
-    if ([arg1 isKindOfClass:[NSString class]] && [jailbreakPathsSet containsObject:arg1]) {
-        return NO;
+    if ([arg1 isKindOfClass:[NSString class]]) {
+        if ([jailbreakPathsSet containsObject:arg1] || [arg1 hasSuffix:@"embedded.mobileprovision"]) {
+            return NO;
+        }
     }
     return %orig;
 }
@@ -1842,8 +1846,29 @@ static NSSet<NSString *> *jailbreakPathsSet;
 %end
 
 %hook NSBundle
+- (NSString *)bundleIdentifier {
+    if (self == [NSBundle mainBundle]) {
+        return @"com.zhiliaoapp.musically";
+    }
+    return %orig;
+}
+
+- (id)objectForInfoDictionaryKey:(NSString *)key {
+    if ([key isEqualToString:@"CFBundleIdentifier"] && self == [NSBundle mainBundle]) {
+        return @"com.zhiliaoapp.musically";
+    }
+    return %orig;
+}
+
 -(id)pathForResource:(id)arg1 ofType:(id)arg2 {
-	if ([arg2 isEqualToString:@"mobileprovision"]) {
+	if ([arg2 isEqualToString:@"mobileprovision"] || [arg1 isEqualToString:@"embedded"]) {
+		return nil;
+	}
+	return %orig;
+}
+
+-(NSURL *)URLForResource:(NSString *)name withExtension:(NSString *)ext {
+	if ([ext isEqualToString:@"mobileprovision"] || [name isEqualToString:@"embedded"]) {
 		return nil;
 	}
 	return %orig;
