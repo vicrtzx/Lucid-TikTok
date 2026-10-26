@@ -1910,6 +1910,6 @@ static NSSet<NSString *> *jailbreakPathsSet;
         @"/etc/apt/sources.list.d/sileo.sources", @"/etc/apt/sources.list.d/electra.list",
         @"/etc/apt", @"/etc/ssl/certs", @"/etc/ssl/cert.pem",
         @"/bin/sh", @"/bin/bash",
-    ];
+    ]];
     %init;
 }
