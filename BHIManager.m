@@ -3,30 +3,36 @@
 
 @implementation BHIManager
 + (BOOL)hideAds {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"hide_ads"] == nil) return YES;
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_ads"];
 }
 + (BOOL)downloadButton {
-     return [[NSUserDefaults standardUserDefaults] boolForKey:@"download_button"];
+     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"download_button"] == nil) return YES;
+    return [[NSUserDefaults standardUserDefaults] boolForKey:@"download_button"];
 }
 + (BOOL)shareSheet {
      return [[NSUserDefaults standardUserDefaults] boolForKey:@"share_sheet"];
 }
 + (BOOL)removeWatermark {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"remove_watermark"] == nil) return YES;
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"remove_watermark"];
 }
 + (BOOL)hideElementButton {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"remove_elements_button"] == nil) return YES;
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"remove_elements_button"];
 }
 + (BOOL)uploadRegion {
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"upload_region"];
 }
 + (BOOL)autoPlay {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"auto_play"] == nil) return YES;
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"auto_play"];
 }
 + (BOOL)stopPlay {
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"stop_play"];
 }
 + (BOOL)progressBar {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"show_porgress_bar"] == nil) return YES;
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"show_porgress_bar"];
 }
 + (BOOL)transparentCommnet {
@@ -42,12 +48,15 @@
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"disable_unsensitive"];
 }
 + (BOOL)disableWarnings {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"disable_warnings"] == nil) return YES;
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"disable_warnings"];
 }
 + (BOOL)disableLive {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"disable_live"] == nil) return YES;
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"disable_live"];
 }
 + (BOOL)skipRecommendations {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"skip_recommnedations"] == nil) return YES;
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"skip_recommnedations"];
 }
 + (BOOL)likeConfirmation {

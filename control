@@ -1,9 +1,9 @@
-Package: com.raulsaeed.bhtiktok++
-Name: BHTikTok++
-Version: 1.5
+Package: com.lucid.tiktok
+Name: Lucid TikTok
+Version: 1.0
 Architecture: iphoneos-arm
-Description: An awesome tweak for TikTok!
-Maintainer: raul saeed
-Author: raul saeed
+Description: Liquid Glass & Battery Optimized TikTok tweak for iOS
+Maintainer: Lucid
+Author: Lucid
 Section: Tweaks
 Depends: mobilesubstrate

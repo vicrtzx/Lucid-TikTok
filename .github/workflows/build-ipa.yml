@@ -1,0 +1,63 @@
+name: Build Lucid TikTok IPA
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Lucid TikTok v1.0
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install System Dependencies
+        run: |
+          brew install dpkg ldid
+          python3 -m pip install --upgrade pip
+          python3 -m pip install git+https://github.com/asdfzxcvbn/pyzule-rw.git
+
+      - name: Setup Theos & SDKs
+        run: |
+          git clone --recursive https://github.com/theos/theos.git ~/theos
+          echo "THEOS=$HOME/theos" >> $GITHUB_ENV
+          curl -Lo master.zip https://github.com/theos/sdks/archive/master.zip
+          unzip -q master.zip
+          mv sdks-master/*.sdk ~/theos/sdks/
+          rm -rf master.zip sdks-master
+          ls -la ~/theos/sdks/
+
+      - name: Compile Lucid TikTok Tweak
+        run: |
+          make clean
+          make package FINALPACKAGE=1
+          ls -la packages/
+
+      - name: Download TikTok 45.8.0 Decrypted IPA
+        run: |
+          echo "Downloading decrypted TikTok v45.8.0 from Archive.org..."
+          curl -L --retry 3 -o TikTok.ipa "https://archive.org/download/decrypt-download-com.zhiliaoapp.musically/%5Bdecrypt.download%5D%20com.zhiliaoapp.musically-45.8.0.ipa"
+          ls -lh TikTok.ipa
+
+      - name: Inject Tweak with Cyan
+        run: |
+          DEB_FILE=$(ls packages/*.deb | head -n 1)
+          echo "Found compiled tweak package: $DEB_FILE"
+          cyan -i TikTok.ipa -f "$DEB_FILE" -o Lucid-TikTok-v1.0.ipa -u -d
+          ls -lh Lucid-TikTok-v1.0.ipa
+
+      - name: Upload Lucid-TikTok-v1.0 IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lucid-TikTok-v1.0
+          path: Lucid-TikTok-v1.0.ipa
+          if-no-files-found: error

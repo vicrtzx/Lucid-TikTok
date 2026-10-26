@@ -3,7 +3,7 @@
 NSArray *jailbreakPaths;
 
 static void showConfirmation(void (^okHandler)(void)) {
-  [%c(AWEUIAlertView) showAlertWithTitle:@"BHTikTok, Hi" description:@"Are you sure?" image:nil actionButtonTitle:@"Yes" cancelButtonTitle:@"No" actionBlock:^{
+  [%c(AWEUIAlertView) showAlertWithTitle:@"Lucid" description:@"Are you sure?" image:nil actionButtonTitle:@"Yes" cancelButtonTitle:@"No" actionBlock:^{
     okHandler();
   } cancelBlock:nil];
 }
@@ -14,12 +14,17 @@ static void showConfirmation(void (^okHandler)(void)) {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"flex_enebaled"]) {
         [[%c(FLEXManager) performSelector:@selector(sharedManager)] performSelector:@selector(showExplorer)];
     }
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"BHTikTokFirstRun"]) {
-        [[NSUserDefaults standardUserDefaults] setValue:@"BHTikTokFirstRun" forKey:@"BHTikTokFirstRun"];
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"LucidTikTokFirstRun_v1"]) {
+        [[NSUserDefaults standardUserDefaults] setValue:@"LucidTikTokFirstRun_v1" forKey:@"LucidTikTokFirstRun_v1"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"hide_ads"];
+        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"disable_live"];
+        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"disable_warnings"];
+        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"remove_watermark"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"download_button"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"remove_elements_button"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"show_porgress_bar"];
+        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"auto_play"];
+        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"skip_recommnedations"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"save_profile"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"copy_profile_information"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"extended_bio"];
@@ -271,9 +276,9 @@ static BOOL isAuthenticationShowed = FALSE;
         TTKSettingsBaseCellPlugin *BHTikTokSettingsPluginCell = [[%c(TTKSettingsBaseCellPlugin) alloc] initWithPluginContext:self.context];
 
         AWESettingItemModel *BHTikTokSettingsItemModel = [[%c(AWESettingItemModel) alloc] initWithIdentifier:@"bhtiktok_settings"];
-        [BHTikTokSettingsItemModel setTitle:@"BHTikTok++ settings"];
-        [BHTikTokSettingsItemModel setDetail:@"BHTikTok++ settings"];
-        [BHTikTokSettingsItemModel setIconImage:[UIImage systemImageNamed:@"gear"]];
+        [BHTikTokSettingsItemModel setTitle:@"Lucid Settings"];
+        [BHTikTokSettingsItemModel setDetail:@"Lucid TikTok v1.0 • Battery & Liquid Glass"];
+        [BHTikTokSettingsItemModel setIconImage:[UIImage systemImageNamed:@"sparkles"]];
         [BHTikTokSettingsItemModel setType:99];
 
         [BHTikTokSettingsPluginCell setItemModel:BHTikTokSettingsItemModel];
@@ -1186,7 +1191,7 @@ static BOOL isAuthenticationShowed = FALSE;
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = [downloadableURL absoluteString];
     } else {
-        [%c(AWEUIAlertView) showAlertWithTitle:@"BHTikTok, Hi" description:@"Could Not Copy Music." image:nil actionButtonTitle:@"OK" cancelButtonTitle:nil actionBlock:nil cancelBlock:nil];
+        [%c(AWEUIAlertView) showAlertWithTitle:@"Lucid" description:@"Could Not Copy Music." image:nil actionButtonTitle:@"OK" cancelButtonTitle:nil actionBlock:nil cancelBlock:nil];
     }
 }
 %new - (void)copyVideo:(AWEAwemeBaseViewController *)rootVC {
@@ -1195,7 +1200,7 @@ static BOOL isAuthenticationShowed = FALSE;
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = [downloadableURL absoluteString];
     } else {
-        [%c(AWEUIAlertView) showAlertWithTitle:@"BHTikTok, Hi" description:@"The video dosen't have music to download." image:nil actionButtonTitle:@"OK" cancelButtonTitle:nil actionBlock:nil cancelBlock:nil];
+        [%c(AWEUIAlertView) showAlertWithTitle:@"Lucid" description:@"The video dosen't have music to download." image:nil actionButtonTitle:@"OK" cancelButtonTitle:nil actionBlock:nil cancelBlock:nil];
     }
 }
 %new - (void)copyDecription:(AWEAwemeBaseViewController *)rootVC {
@@ -1204,7 +1209,7 @@ static BOOL isAuthenticationShowed = FALSE;
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = video_description;
     } else {
-        [%c(AWEUIAlertView) showAlertWithTitle:@"BHTikTok, Hi" description:@"The video dosen't have music to download." image:nil actionButtonTitle:@"OK" cancelButtonTitle:nil actionBlock:nil cancelBlock:nil];
+        [%c(AWEUIAlertView) showAlertWithTitle:@"Lucid" description:@"The video dosen't have music to download." image:nil actionButtonTitle:@"OK" cancelButtonTitle:nil actionBlock:nil cancelBlock:nil];
     }
 }
 %new - (void) downloadButtonHandler:(UIButton *)sender {
@@ -1546,7 +1551,7 @@ static BOOL isAuthenticationShowed = FALSE;
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = [downloadableURL absoluteString];
     } else {
-        [%c(AWEUIAlertView) showAlertWithTitle:@"BHTikTok, Hi" description:@"The video dosen't have music to download." image:nil actionButtonTitle:@"OK" cancelButtonTitle:nil actionBlock:nil cancelBlock:nil];
+        [%c(AWEUIAlertView) showAlertWithTitle:@"Lucid" description:@"The video dosen't have music to download." image:nil actionButtonTitle:@"OK" cancelButtonTitle:nil actionBlock:nil cancelBlock:nil];
     }
 }
 %new - (void)copyVideo:(AWEAwemeBaseViewController *)rootVC {
@@ -1555,7 +1560,7 @@ static BOOL isAuthenticationShowed = FALSE;
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = [downloadableURL absoluteString];
     } else {
-        [%c(AWEUIAlertView) showAlertWithTitle:@"BHTikTok, Hi" description:@"The video dosen't have music to download." image:nil actionButtonTitle:@"OK" cancelButtonTitle:nil actionBlock:nil cancelBlock:nil];
+        [%c(AWEUIAlertView) showAlertWithTitle:@"Lucid" description:@"The video dosen't have music to download." image:nil actionButtonTitle:@"OK" cancelButtonTitle:nil actionBlock:nil cancelBlock:nil];
     }
 }
 %new - (void)copyDecription:(AWEAwemeBaseViewController *)rootVC {
@@ -1564,7 +1569,7 @@ static BOOL isAuthenticationShowed = FALSE;
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = video_description;
     } else {
-        [%c(AWEUIAlertView) showAlertWithTitle:@"BHTikTok, Hi" description:@"The video dosen't have music to download." image:nil actionButtonTitle:@"OK" cancelButtonTitle:nil actionBlock:nil cancelBlock:nil];
+        [%c(AWEUIAlertView) showAlertWithTitle:@"Lucid" description:@"The video dosen't have music to download." image:nil actionButtonTitle:@"OK" cancelButtonTitle:nil actionBlock:nil cancelBlock:nil];
     }
 }
 %new - (void) downloadButtonHandler:(UIButton *)sender {
