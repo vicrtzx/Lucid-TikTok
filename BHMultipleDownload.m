@@ -36,10 +36,11 @@
         [self.delegate downloaderProgress:prog];
     }
 }
+
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
   didFinishDownloadingToURL:(NSURL *)location {
-    NSString *documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    NSString *destinationPath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@-%@", NSUUID.UUID.UUIDString, downloadTask.response.suggestedFilename]];
+    NSString *tempPath = NSTemporaryDirectory();
+    NSString *destinationPath = [tempPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@-%@", NSUUID.UUID.UUIDString, downloadTask.response.suggestedFilename ?: @"video.mp4"]];
     
     NSError *error;
     [[NSFileManager defaultManager] moveItemAtURL:location toURL:[NSURL fileURLWithPath:destinationPath] error:&error];
@@ -54,6 +55,7 @@
         if ([self.delegate respondsToSelector:@selector(downloaderDidFinishDownloadingAllFiles:)]) {
             [self.delegate downloaderDidFinishDownloadingAllFiles:_downloadedFilePaths];
         }
+        [self.session finishTasksAndInvalidate];
     }
 }
 
@@ -62,4 +64,14 @@
         [self.delegate downloaderDidFailureWithError:error];
     }
 }
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+    if (error) {
+        if ([self.delegate respondsToSelector:@selector(downloaderDidFailureWithError:)]) {
+            [self.delegate downloaderDidFailureWithError:error];
+        }
+        [self.session finishTasksAndInvalidate];
+    }
+}
+
 @end

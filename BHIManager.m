@@ -25,7 +25,6 @@
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"upload_region"];
 }
 + (BOOL)autoPlay {
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"auto_play"] == nil) return YES;
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"auto_play"];
 }
 + (BOOL)stopPlay {
@@ -126,54 +125,14 @@
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"padlock"];
 }
 + (void)cleanCache {
-    NSArray <NSURL *> *DocumentFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, true).firstObject] includingPropertiesForKeys:@[] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
-    
-    for (NSURL *file in DocumentFiles) {
-        if ([file.pathExtension.lowercaseString isEqualToString:@"mp4"]) {
+    NSString *tempDir = NSTemporaryDirectory();
+    NSArray <NSURL *> *tempFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:tempDir] includingPropertiesForKeys:@[] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
+    NSSet *extensionsToDelete = [NSSet setWithObjects:@"mp4", @"mov", @"tmp", @"png", @"jpeg", @"jpg", @"mp3", @"m4a", nil];
+    for (NSURL *file in tempFiles) {
+        if ([extensionsToDelete containsObject:file.pathExtension.lowercaseString]) {
             [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-        }
-        if ([file.pathExtension.lowercaseString isEqualToString:@"png"]) {
+        } else if ([file hasDirectoryPath] && [BHIManager isEmpty:file]) {
             [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-        }
-        if ([file.pathExtension.lowercaseString isEqualToString:@"jpeg"]) {
-            [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-        }
-        if ([file.pathExtension.lowercaseString isEqualToString:@"mp3"]) {
-            [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-        }
-        if ([file.pathExtension.lowercaseString isEqualToString:@"m4a"]) {
-            [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-        }
-    }
-    
-    NSArray <NSURL *> *TempFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:NSTemporaryDirectory()] includingPropertiesForKeys:@[] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
-    
-    for (NSURL *file in TempFiles) {
-        if ([file.pathExtension.lowercaseString isEqualToString:@"mp4"]) {
-            [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-        }
-        if ([file.pathExtension.lowercaseString isEqualToString:@"mov"]) {
-            [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-        }
-        if ([file.pathExtension.lowercaseString isEqualToString:@"tmp"]) {
-            [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-        }
-        if ([file.pathExtension.lowercaseString isEqualToString:@"png"]) {
-            [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-        }
-        if ([file.pathExtension.lowercaseString isEqualToString:@"jpeg"]) {
-            [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-        }
-        if ([file.pathExtension.lowercaseString isEqualToString:@"mp3"]) {
-            [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-        }
-        if ([file.pathExtension.lowercaseString isEqualToString:@"m4a"]) {
-            [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-        }
-        if ([file hasDirectoryPath]) {
-            if ([BHIManager isEmpty:file]) {
-                [[NSFileManager defaultManager] removeItemAtURL:file error:nil];
-            }
         }
     }
 }

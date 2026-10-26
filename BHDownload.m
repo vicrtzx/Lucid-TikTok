@@ -1,9 +1,5 @@
 //
 //  BHDownload.m
-//  DIYTableView
-//
-//  Created by BandarHelal on 12/01/1442 AH.
-//  Copyright © 1442 BandarHelal. All rights reserved.
 //
 
 #import "BHDownload.h"
@@ -35,11 +31,15 @@
 }
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(nonnull NSURL *)location {
     [delegate downloadDidFinish:location Filename:self.fileName];
+    [self.Session finishTasksAndInvalidate];
 }
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error {
     [delegate downloadDidFailureWithError:error];
 }
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
-    [delegate downloadDidFailureWithError:error];
+    if (error) {
+        [delegate downloadDidFailureWithError:error];
+    }
+    [self.Session finishTasksAndInvalidate];
 }
 @end

@@ -23,15 +23,24 @@ static void showConfirmation(void (^okHandler)(void)) {
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"download_button"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"remove_elements_button"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"show_porgress_bar"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"auto_play"];
+        [[NSUserDefaults standardUserDefaults] setBool:false forKey:@"auto_play"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"skip_recommnedations"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"save_profile"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"copy_profile_information"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"extended_bio"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"extendedComment"];
     }
-    [BHIManager cleanCache];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [BHIManager cleanCache];
+    });
     return true;
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    %orig;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [BHIManager cleanCache];
+    });
 }
 
 static BOOL isAuthenticationShowed = FALSE;
@@ -1105,13 +1114,14 @@ static BOOL isAuthenticationShowed = FALSE;
     }
 }
 %new - (void)addDownloadButton {
-    UIButton *downloadButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [downloadButton setTag:998];
-    [downloadButton setTranslatesAutoresizingMaskIntoConstraints:false];
-    [downloadButton addTarget:self action:@selector(downloadButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
-    [downloadButton setImage:[UIImage systemImageNamed:@"arrow.down"] forState:UIControlStateNormal];
-    if (![self viewWithTag:998]) {
-        [downloadButton setTintColor:[UIColor whiteColor]];
+    UIButton *downloadButton = (UIButton *)[self viewWithTag:998];
+    if (!downloadButton) {
+        downloadButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [downloadButton setTag:998];
+        [downloadButton setTranslatesAutoresizingMaskIntoConstraints:false];
+        [downloadButton addTarget:self action:@selector(downloadButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
+        [downloadButton setImage:[UIImage systemImageNamed:@"arrow.down"] forState:UIControlStateNormal];
+        [downloadButton setTintColor:[UIColor colorWithRed:0.96 green:0.96 blue:0.97 alpha:1.0]];
         [self addSubview:downloadButton];
 
         [NSLayoutConstraint activateConstraints:@[
@@ -1393,18 +1403,13 @@ static BOOL isAuthenticationShowed = FALSE;
     }
 }
 %new - (void)addHideElementButton {
-    UIButton *hideElementButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [hideElementButton setTag:999];
-    [hideElementButton setTranslatesAutoresizingMaskIntoConstraints:false];
-    [hideElementButton addTarget:self action:@selector(hideElementButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
-    if (self.elementsHidden) {
-        [hideElementButton setImage:[UIImage systemImageNamed:@"eye"] forState:UIControlStateNormal];
-    } else {
-        [hideElementButton setImage:[UIImage systemImageNamed:@"eye.slash"] forState:UIControlStateNormal];
-    }
-
-    if (![self viewWithTag:999]) {
-        [hideElementButton setTintColor:[UIColor whiteColor]];
+    UIButton *hideElementButton = (UIButton *)[self viewWithTag:999];
+    if (!hideElementButton) {
+        hideElementButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [hideElementButton setTag:999];
+        [hideElementButton setTranslatesAutoresizingMaskIntoConstraints:false];
+        [hideElementButton addTarget:self action:@selector(hideElementButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
+        [hideElementButton setTintColor:[UIColor colorWithRed:0.96 green:0.96 blue:0.97 alpha:1.0]];
         [self addSubview:hideElementButton];
 
         [NSLayoutConstraint activateConstraints:@[
@@ -1413,6 +1418,11 @@ static BOOL isAuthenticationShowed = FALSE;
             [hideElementButton.widthAnchor constraintEqualToConstant:30],
             [hideElementButton.heightAnchor constraintEqualToConstant:30],
         ]];
+    }
+    if (self.elementsHidden) {
+        [hideElementButton setImage:[UIImage systemImageNamed:@"eye"] forState:UIControlStateNormal];
+    } else {
+        [hideElementButton setImage:[UIImage systemImageNamed:@"eye.slash"] forState:UIControlStateNormal];
     }
 }
 %new - (void)hideElementButtonHandler:(UIButton *)sender {
@@ -1506,13 +1516,14 @@ static BOOL isAuthenticationShowed = FALSE;
     }
 }
 %new - (void)addDownloadButton {
-    UIButton *downloadButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [downloadButton setTag:998];
-    [downloadButton setTranslatesAutoresizingMaskIntoConstraints:false];
-    [downloadButton addTarget:self action:@selector(downloadButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
-    [downloadButton setImage:[UIImage systemImageNamed:@"arrow.down"] forState:UIControlStateNormal];
-    if (![self viewWithTag:998]) {
-        [downloadButton setTintColor:[UIColor whiteColor]];
+    UIButton *downloadButton = (UIButton *)[self viewWithTag:998];
+    if (!downloadButton) {
+        downloadButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [downloadButton setTag:998];
+        [downloadButton setTranslatesAutoresizingMaskIntoConstraints:false];
+        [downloadButton addTarget:self action:@selector(downloadButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
+        [downloadButton setImage:[UIImage systemImageNamed:@"arrow.down"] forState:UIControlStateNormal];
+        [downloadButton setTintColor:[UIColor colorWithRed:0.96 green:0.96 blue:0.97 alpha:1.0]];
         [self addSubview:downloadButton];
 
         [NSLayoutConstraint activateConstraints:@[
@@ -1639,18 +1650,13 @@ static BOOL isAuthenticationShowed = FALSE;
     }
 }
 %new - (void)addHideElementButton {
-    UIButton *hideElementButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [hideElementButton setTag:999];
-    [hideElementButton setTranslatesAutoresizingMaskIntoConstraints:false];
-    [hideElementButton addTarget:self action:@selector(hideElementButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
-    if (self.elementsHidden) {
-        [hideElementButton setImage:[UIImage systemImageNamed:@"eye"] forState:UIControlStateNormal];
-    } else {
-        [hideElementButton setImage:[UIImage systemImageNamed:@"eye.slash"] forState:UIControlStateNormal];
-    }
-
-    if (![self viewWithTag:999]) {
-        [hideElementButton setTintColor:[UIColor whiteColor]];
+    UIButton *hideElementButton = (UIButton *)[self viewWithTag:999];
+    if (!hideElementButton) {
+        hideElementButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [hideElementButton setTag:999];
+        [hideElementButton setTranslatesAutoresizingMaskIntoConstraints:false];
+        [hideElementButton addTarget:self action:@selector(hideElementButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
+        [hideElementButton setTintColor:[UIColor colorWithRed:0.96 green:0.96 blue:0.97 alpha:1.0]];
         [self addSubview:hideElementButton];
 
         [NSLayoutConstraint activateConstraints:@[
@@ -1659,6 +1665,11 @@ static BOOL isAuthenticationShowed = FALSE;
             [hideElementButton.widthAnchor constraintEqualToConstant:30],
             [hideElementButton.heightAnchor constraintEqualToConstant:30],
         ]];
+    }
+    if (self.elementsHidden) {
+        [hideElementButton setImage:[UIImage systemImageNamed:@"eye"] forState:UIControlStateNormal];
+    } else {
+        [hideElementButton setImage:[UIImage systemImageNamed:@"eye.slash"] forState:UIControlStateNormal];
     }
 }
 %new - (void)hideElementButtonHandler:(UIButton *)sender {
@@ -1748,22 +1759,20 @@ static BOOL isAuthenticationShowed = FALSE;
 }
 %end
 
+static NSSet<NSString *> *jailbreakPathsSet;
+
 %hook NSFileManager
 -(BOOL)fileExistsAtPath:(id)arg1 {
-	for (NSString *file in jailbreakPaths) {
-		if ([arg1 isEqualToString:file]) {
-			return NO;
-		}
-	}
-	return %orig;
+    if ([arg1 isKindOfClass:[NSString class]] && [jailbreakPathsSet containsObject:arg1]) {
+        return NO;
+    }
+    return %orig;
 }
 -(BOOL)fileExistsAtPath:(id)arg1 isDirectory:(BOOL*)arg2 {
-	for (NSString *file in jailbreakPaths) {
-		if ([arg1 isEqualToString:file]) {
-			return NO;
-		}
-	}
-	return %orig;
+    if ([arg1 isKindOfClass:[NSString class]] && [jailbreakPathsSet containsObject:arg1]) {
+        return NO;
+    }
+    return %orig;
 }
 %end
 %hook BDADeviceHelper
@@ -1872,7 +1881,7 @@ static BOOL isAuthenticationShowed = FALSE;
 
 
 %ctor {
-    jailbreakPaths = @[
+    jailbreakPathsSet = [NSSet setWithArray:@[
         @"/Applications/Cydia.app", @"/Applications/blackra1n.app",
         @"/Applications/FakeCarrier.app", @"/Applications/Icy.app",
         @"/Applications/IntelliScreen.app", @"/Applications/MxTube.app",
